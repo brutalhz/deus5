@@ -49,8 +49,10 @@ deploy-job:      # This job runs in the deploy stage.
 release-job:
   stage: release
   image: docker:stable
+  before_script:
+    - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
-    - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
     - docker pull ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}
+    - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
     - docker image tag ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG} ${IMAGE_NAME}:latest
     - docker push ${IMAGE_NAME}:latest
