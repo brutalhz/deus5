@@ -55,4 +55,4 @@ release-job:
     - docker pull ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}
     - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
     - docker image tag ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG} ${IMAGE_NAME}:latest
-    - docker push ${DH_REGISTRY_IMAGE}
+    - docker push ${CI_PROJECT_PATH}/${CI_PROJECT_NAME}:latest
