@@ -24,7 +24,7 @@ stages:          # List of stages for jobs, and their order of execution
 variables:
   PROJECT_NAME: '${CI_PROJECT_NAME}'
   IMAGE_NAME: '${CI_REGISTRY}/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}'
-
+  
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   image: docker:stable
@@ -55,4 +55,4 @@ release-job:
     - docker pull ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}
     - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
     - docker image tag ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG} ${IMAGE_NAME}:latest
-    - docker push ${IMAGE_NAME}:latest
+    - docker push ${DH_REGISTRY_IMAGE}:latest
