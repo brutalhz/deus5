@@ -23,7 +23,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 variables:
   PROJECT_NAME: '${CI_PROJECT_NAME}'
-  IMAGE_NAME: '${CI_REGISTRY}/${CI_PROJECT_NAME}'
+  IMAGE_NAME: '${CI_REGISTRY}/${CI_PROJECT_NAME}/${CI_PROJECT_NAME}'
   
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -32,8 +32,8 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker:dind
   script:
     - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-    - docker build --pull -t ${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG} .
-    - docker push ${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
+    - docker build --pull -t ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG} .
+    - docker push ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}
   tags:
     - dev-docker
 
