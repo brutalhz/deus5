@@ -18,8 +18,8 @@
 
 stages:          # List of stages for jobs, and their order of execution
   - build
-  - deploy
   - release
+  - deploy
 
 variables:
   PROJECT_NAME: '${CI_PROJECT_NAME}'
@@ -49,8 +49,6 @@ release-job:
     - docker push ${CI_PROJECT_PATH}:latest
   tags:
     - dev-docker
-  depends_on:
-     - build-job
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
@@ -73,5 +71,3 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Application successfully deployed."
   tags:
     - dev-docker
-  depends_on:
-    - release-job
