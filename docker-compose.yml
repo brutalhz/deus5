@@ -1,0 +1,7 @@
+version: '3'
+services:
+    hugo:
+      build: .
+      hostname: hugo
+      ports:
+        - "1313:1313"

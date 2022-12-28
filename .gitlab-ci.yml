@@ -37,15 +37,6 @@ build-job:       # This job runs in the build stage, which runs first.
   tags:
     - dev-docker
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-#  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
-  tags:
-    - dev-docker
-
 release-job:
   stage: release
   image: docker:stable
@@ -56,3 +47,24 @@ release-job:
     - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
     - docker image tag ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG} ${CI_PROJECT_PATH}:latest
     - docker push ${CI_PROJECT_PATH}:latest
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  before_script:
+    - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
+    - export DOCKER_HOST=tcp://192.168.244.185:2376
+    - docker stop ${CI_PROJECT_NAME} || true
+    - docker rm ${CI_PROJECT_NAME} || true
+    - docker rmi ${CI_PROJECT_PATH}:latest
+    - docker pull ${CI_PROJECT_PATH}:latest
+    
+#  services:
+#    - docker:dind
+  
+#  environment: production
+  script:
+    - docker run --name ${CI_PROJECT_NAME} -d -p 127.0.0.1:1313:1313 --restart unless-stopped ${CI_PROJECT_PATH}:latest
+    - docker pull ${CI_PROJECT_PATH}:latest
+    - echo "Application successfully deployed."
+  tags:
+    - dev-docker
