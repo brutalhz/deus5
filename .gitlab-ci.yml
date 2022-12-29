@@ -58,10 +58,10 @@ deploy-job:      # This job runs in the deploy stage.
 
     - chmod og= $SSH_PRIVATE_KEY
     - apt-get update && apt-get install openssh-client git
-    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@$192.168.244.185 "docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}"
-    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@$192.168.244.185 "docker pull ${CI_PROJECT_PATH}:latest"
-    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@$192.168.244.185 "docker container rm -f ${CI_PROJECT_NAME} || true"
-    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@$192.168.244.185 "docker run --name ${CI_PROJECT_NAME} -d -p 127.0.0.1:1313:1313 --restart unless-stopped ${CI_PROJECT_PATH}:latest"
+    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.185 "docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}"
+    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.185 "docker pull ${CI_PROJECT_PATH}:latest"
+    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.185 "docker container rm -f ${CI_PROJECT_NAME} || true"
+    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.185 "docker run --name ${CI_PROJECT_NAME} -d -p 127.0.0.1:1313:1313 --restart unless-stopped ${CI_PROJECT_PATH}:latest"
     - echo "Application successfully deployed."
   only:
     - master
