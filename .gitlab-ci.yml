@@ -43,7 +43,7 @@ deploy-dev:
   script:
     - chmod og= $SSH_PRIVATE_KEY
     - apt-get update && apt-get install openssh-client git
-    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.186 Эdocker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+    - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.186 "docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.186 "docker pull ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}"
     - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.185 "docker container rm -f ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG} || true"
     - ssh -i $SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@192.168.244.186 "docker run --name ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG} -d -p 127.0.0.1:1314:1313 --restart unless-stopped ${IMAGE_NAME}:${CI_COMMIT_REF_SLUG}"
