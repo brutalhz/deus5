@@ -55,7 +55,7 @@ deploy-job:      # This job runs in the deploy stage.
   image: docker:stable
   before_script:
     - docker login -u ${DH_REGISTRY_USER} -p ${DH_REGISTRY_PASSWORD} ${DH_REGISTRY}
-    - cp $DOCKER_CACERT ~/.docker/ca.pem && cp $DOCKER_CERT ~/.docker/cert.pem && cp $DOCKER_KEY ~/.docker/key.pem
+    - echo $DOCKER_CACERT > ~/.docker/ca.pem && echo $DOCKER_CERT > ~/.docker/cert.pem && echo $DOCKER_KEY > ~/.docker/key.pem
     - export DOCKER_HOST=tcp://192.168.244.185:2376 DOCKER_TLS_VERIFY=1
     - docker stop ${CI_PROJECT_NAME} || true
     - docker rm ${CI_PROJECT_NAME} || true
